@@ -34,6 +34,9 @@ RUN sudo add-apt-repository ppa:deadsnakes/ppa -y
 # Install Git
 RUN sudo apt install -y --no-install-recommends git python3-pip python3-pyqt5
 
+# Install Gazebo
+RUN sudo apt-get install ros-${ROS_DISTRO}-ros-gz
+
 # Rosdep update
 RUN rosdep update
 
@@ -42,7 +45,3 @@ WORKDIR /home/${USERNAME}/projects/
 
 # Source the ROS setup file
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
-
-################################
-## ADD ANY CUSTOM SETUP BELOW ##
-################################
