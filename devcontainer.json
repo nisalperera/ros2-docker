@@ -3,7 +3,9 @@
     "dockerFile": "Dockerfile",
     "runArgs": [
       "--privileged",
-      "--network=host"
+      "--network=host",
+      "--ipc=host",
+      "-e QT_X11_NO_MITSHM=1"
     ],
     "workspaceMount": "source=${localWorkspaceFolder},target=/home/ubuntu/projects,type=bind",
     "workspaceFolder": "/home/ubuntu/projects",
