@@ -1,11 +1,12 @@
 {
-    "name": "rolling desktop-full",
+    "name": "ROS 2 desktop-full",
     "dockerFile": "Dockerfile",
     "runArgs": [
       "--privileged",
       "--network=host",
       "--ipc=host",
-      "-e QT_X11_NO_MITSHM=1"
+      "-e QT_X11_NO_MITSHM=1",
+      "--volume=/tmp/.X11-unix:/tmp/.X11-unix"
     ],
     "workspaceFolder": "/home/ubuntu/projects",
     "workspaceMount": "source=${localWorkspaceFolder}/ws/src,target=/home/ubuntu/projects,type=bind",
@@ -13,9 +14,23 @@
       "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/ubuntu/.bash_history,type=bind",
       "source=${localWorkspaceFolder}/remove.sh,target=/home/ubuntu/projects/remove.sh,type=bind",
       "source=${localWorkspaceFolder}/gazebo_models,target=/home/ubuntu/gazebo_models,type=bind",
-      "source=${localWorkspaceFolder}/gazebo_worlds,target=/home/ubuntu/gazebo_worlds,type=bind",
-      "source=${localWorkspaceFolder}/bullet3,target=/home/ubuntu/bullet3,type=bind"
+      "source=${localWorkspaceFolder}/gazebo_worlds,target=/home/ubuntu/gazebo_worlds,type=bind"
+      // "source=${localWorkspaceFolder}/bullet3,target=/home/ubuntu/bullet3,type=bind"
     ],
-    "postCreateCommand": "chmod +x remove.sh && sh remove.sh"
+    "postCreateCommand": "chmod +x remove.sh && sh remove.sh",
+    
+    "build": { 
+      "args": {
+          "ROS_DISTRO": "humble"
+        }
+    },
+    
+    "containerEnv": {
+        "DISPLAY": "${localEnv:DISPLAY}"
+    },
+    
+    "remoteEnv": {
+        "DOCKER_BUILDKIT": "0"
+    }
   }
   

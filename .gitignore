@@ -164,9 +164,11 @@ cython_debug/
 # Ignore everything
 *
 
-# But not these files...
+# # But not these files...
 !.gitignore
 !.devcontainer/*
+!remove.sh
+!bashrc
 
 # ...even if they are in subdirectories
-!*/
+# !*/

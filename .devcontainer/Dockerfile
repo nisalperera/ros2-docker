@@ -1,4 +1,5 @@
-FROM osrf/ros:rolling-desktop-full
+ARG ROS_DISTRO=foxy
+FROM osrf/ros:${ROS_DISTRO}-desktop-full
 
 # Add ubuntu user with same UID and GID as your host system, if it doesn't already exist
 # Since Ubuntu 24.04, a non-root user is created by default with the name vscode and UID=1000
@@ -32,7 +33,7 @@ RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
 RUN sudo add-apt-repository ppa:deadsnakes/ppa -y
 
 # Install Git
-RUN sudo apt install -y --no-install-recommends git python3-pip python3-pyqt5
+RUN sudo apt install -y --no-install-recommends git python3-pip python3-pyqt5 libgl1-mesa-glx
 
 # Install Gazebo
 RUN sudo apt-get install ros-${ROS_DISTRO}-ros-gz
