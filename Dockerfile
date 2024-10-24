@@ -32,7 +32,7 @@ RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
 RUN sudo add-apt-repository ppa:deadsnakes/ppa -y
 
 # Install Git
-RUN sudo apt install -y --no-install-recommends git python3-pip 
+RUN sudo apt install -y --no-install-recommends git python3-pip python3-pyqt5
 
 # Rosdep update
 RUN rosdep update
