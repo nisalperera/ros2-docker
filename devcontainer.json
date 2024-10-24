@@ -1,0 +1,15 @@
+{
+    "name": "rolling desktop-full",
+    "dockerFile": "Dockerfile",
+    "runArgs": [
+      "--privileged",
+      "--network=host"
+    ],
+    "workspaceMount": "source=${localWorkspaceFolder},target=/home/ubuntu/projects,type=bind",
+    "workspaceFolder": "/home/ubuntu/projects",
+    "mounts": [
+      "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/ubuntu/.bash_history,type=bind",
+      // "source=${localWorkspaceFolder}/bashrc,target=/home/ubuntu/.bashrc,type=bind"
+    ]
+  }
+  
