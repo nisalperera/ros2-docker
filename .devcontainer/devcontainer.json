@@ -7,11 +7,15 @@
       "--ipc=host",
       "-e QT_X11_NO_MITSHM=1"
     ],
-    "workspaceMount": "source=${localWorkspaceFolder},target=/home/ubuntu/projects,type=bind",
     "workspaceFolder": "/home/ubuntu/projects",
+    "workspaceMount": "source=${localWorkspaceFolder}/ws/src,target=/home/ubuntu/projects,type=bind",
     "mounts": [
       "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/ubuntu/.bash_history,type=bind",
-      // "source=${localWorkspaceFolder}/bashrc,target=/home/ubuntu/.bashrc,type=bind"
-    ]
+      "source=${localWorkspaceFolder}/remove.sh,target=/home/ubuntu/projects/remove.sh,type=bind",
+      "source=${localWorkspaceFolder}/gazebo_models,target=/home/ubuntu/gazebo_models,type=bind",
+      "source=${localWorkspaceFolder}/gazebo_worlds,target=/home/ubuntu/gazebo_worlds,type=bind",
+      "source=${localWorkspaceFolder}/bullet3,target=/home/ubuntu/bullet3,type=bind"
+    ],
+    "postCreateCommand": "chmod +x remove.sh && sh remove.sh"
   }
   
