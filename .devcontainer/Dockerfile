@@ -35,11 +35,11 @@ RUN sudo add-apt-repository ppa:deadsnakes/ppa -y
 # Install Git
 RUN sudo apt install -y --no-install-recommends git python3-pip python3-pyqt5 libgl1-mesa-glx
 
-# Install Gazebo
-RUN sudo apt-get install ros-${ROS_DISTRO}-ros-gz
+# Install ros2 packages including Gazebo 
+RUN sudo apt-get -y install ros-${ROS_DISTRO}-ros-gz ros-${ROS_DISTRO}-gazebo-ros-pkgs ros-${ROS_DISTRO}-joint-state-publisher-gui
 
 # Rosdep update
-RUN rosdep update
+# RUN rosdep update
 
 # Switch to home dir
 WORKDIR /home/${USERNAME}/projects/
@@ -49,5 +49,5 @@ WORKDIR /home/${USERNAME}/projects/
 
 # Source the ROS setup file
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
-RUN echo "export GAZEBO_MODEL_PATH=$HOME/gazebo_models:/usr/share/gazebo-11/models/:$GAZEBO_MODEL_PATH" >> ~/.bashrc
-RUN echo "export GAZEBO_RESOURCE_PATH=$HOME/gazebo_worlds:$GAZEBO_RESOURCE_PATH" >> ~/.bashrc
+# RUN echo "export GAZEBO_MODEL_PATH=$HOME/gazebo_models:/usr/share/gazebo-11/models/:$GAZEBO_MODEL_PATH" >> ~/.bashrc
+# RUN echo "export GAZEBO_RESOURCE_PATH=$HOME/gazebo_worlds/:$GAZEBO_RESOURCE_PATH" >> ~/.bashrc

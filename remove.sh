@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Remove directories if they exist
-for dir in logs build install; do
+for dir in log build install; do
   if [ -d "$dir" ]; then
     echo "Removing directory: $dir"
     rm -rf "$dir"
