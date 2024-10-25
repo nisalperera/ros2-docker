@@ -1,53 +1,39 @@
 ARG ROS_DISTRO=foxy
-FROM osrf/ros:${ROS_DISTRO}-desktop-full
+FROM nvidia/cuda:12.2.0-runtime-ubuntu22.04 as build-stage
+
+ARG ROS_DISTRO
+
+ARG ROS_DISTRO=foxy
+FROM osrf/ros:${ROS_DISTRO}-desktop-full as final-stage
+
+COPY --from=build-stage /usr/local /usr/local
 
 # Add ubuntu user with same UID and GID as your host system, if it doesn't already exist
 # Since Ubuntu 24.04, a non-root user is created by default with the name vscode and UID=1000
-ARG USERNAME=ubuntu
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
-RUN if ! id -u $USER_UID >/dev/null 2>&1; then \
-        groupadd --gid $USER_GID $USERNAME && \
-        useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME; \
+ARG USER=ubuntu
+ENV USER=$USER
+ARG UID=1000
+ARG GID=$UID
+RUN if ! id -u $UID >/dev/null 2>&1; then \
+        groupadd --gid $GID $USER && \
+        useradd -s /bin/bash --uid $UID --gid $GID -m $USER; \
     fi
 # Add sudo support for the non-root user
 RUN apt-get update && \
     apt-get install -y sudo && \
-    echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME && \
-    chmod 0440 /etc/sudoers.d/$USERNAME
+    echo "$USER ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USER && \
+    chmod 0440 /etc/sudoers.d/$USER
 
 # Switch from root to user
-USER $USERNAME
+USER $USER
 
 # Add user to video group to allow access to webcam
-RUN sudo usermod --append --groups video $USERNAME
-
-# Update all packages
-RUN sudo apt update && sudo apt upgrade -y
-
-RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
-    wget \
-    software-properties-common && \
-    sudo rm -rf /var/lib/apt/lists/*
-
-RUN sudo add-apt-repository ppa:deadsnakes/ppa -y
-
-# Install Git
-RUN sudo apt install -y --no-install-recommends git python3-pip python3-pyqt5 libgl1-mesa-glx
-
-# Install ros2 packages including Gazebo 
-RUN sudo apt-get -y install ros-${ROS_DISTRO}-ros-gz ros-${ROS_DISTRO}-gazebo-ros-pkgs ros-${ROS_DISTRO}-joint-state-publisher-gui htop
-
-# Rosdep update
-# RUN rosdep update
+RUN sudo usermod --append --groups video $USER
 
 # Switch to home dir
-WORKDIR /home/${USERNAME}/projects/
+WORKDIR /home/$USER/projects/
 
-# RUN chmod +x remove.sh
-# RUN sh remove.sh
+ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+ENV PATH=/usr/local/cuda/bin:/home/$USER/.local/bin/:$PATH
 
-# Source the ROS setup file
-RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
-RUN echo "export XDG_RUNTIME_DIR=/home/${USERNAME}" >> ~/.bashrc
-RUN echo "chmod 0700 /home/${USERNAME}" >> ~/.bashrc
+CMD ["bash"]
