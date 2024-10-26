@@ -24,7 +24,7 @@
     
     "build": { 
       "args": {
-          "ROS_DISTRO": "foxy"
+          "ROS_DISTRO": "humble"
         }
     },
     

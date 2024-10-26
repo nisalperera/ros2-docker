@@ -10,7 +10,7 @@ sudo apt-get update && sudo apt-get install -y --no-install-recommends \
     sudo rm -rf /var/lib/apt/lists/*
 
 
-echo "Adding Deadsnakes PPA"
+echo "Adding Deadsnakes PPA\\n"
 sudo add-apt-repository ppa:deadsnakes/ppa -y
 
 echo "Install Git, Python and PyQT5 \\n"
