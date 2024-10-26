@@ -1,5 +1,5 @@
 {
-    "name": "ROS 2 desktop-full",
+    "name": "ROS 2 Foxy desktop",
     "dockerFile": "Dockerfile",
     "runArgs": [
       "--privileged",
@@ -21,12 +21,6 @@
     ],
     // "postCreateCommand": "chmod +x remove.sh && sh remove.sh",
     "postCreateCommand": "chmod +x setup.sh && sh setup.sh",
-    
-    "build": { 
-      "args": {
-          "ROS_DISTRO": "humble"
-        }
-    },
     
     "containerEnv": {
         "DISPLAY": "${localEnv:DISPLAY}"

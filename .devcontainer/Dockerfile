@@ -1,10 +1,6 @@
-ARG ROS_DISTRO=foxy
 FROM nvidia/cuda:12.2.0-runtime-ubuntu22.04 as build-stage
 
-ARG ROS_DISTRO
-
-ARG ROS_DISTRO=foxy
-FROM osrf/ros:${ROS_DISTRO}-desktop-full as final-stage
+FROM osrf/ros:foxy-desktop as final-stage
 
 COPY --from=build-stage /usr/local /usr/local
 
