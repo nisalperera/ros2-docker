@@ -7,7 +7,8 @@
       "--ipc=host",
       "-e QT_X11_NO_MITSHM=1",
       "--volume=/tmp/.X11-unix:/tmp/.X11-unix",
-      "--gpus=all"
+      "--gpus=all",
+      "--name=ROS2-humble"
     ],
     "workspaceFolder": "/home/ubuntu/projects",
     "workspaceMount": "source=${localWorkspaceFolder}/projects,target=/home/ubuntu/projects,type=bind",
