@@ -28,6 +28,18 @@
           "ROS_DISTRO": "humble"
         }
     },
+
+    "customizations": {
+      // Configure properties specific to VS Code.
+      "vscode": {
+        // Add the IDs of extensions you want installed when the container is created.
+        "extensions": [
+          "ms-vscode.makefile-tools",
+          "ms-python.python",
+          "ms-toolsai.jupyter"
+        ]
+      }
+    },
     
     "containerEnv": {
         "DISPLAY": "${localEnv:DISPLAY}"

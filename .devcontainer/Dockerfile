@@ -65,4 +65,17 @@ RUN pip3 install ultralytics opencv-python lap
 
 RUN sudo rm -rf /etc/localtime && sudo ln -s /usr/share/zoneinfo/Asia/Colombo /etc/localtime
 
+RUN . /opt/ros/humble/setup.sh
+
+RUN echo "\\nRosdep update \\n"
+# Rosdep update
+RUN rosdep update
+
+RUN echo "\\nSource the ROS setup file and final configs \\n"
+# Source the ROS setup file
+RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
+RUN echo "export XDG_RUNTIME_DIR=/home/$USER" >> ~/.bashrc
+RUN echo "export PYTHONPATH=$PYTHONPATH:$HOME/.local/lib/python3.10/site-packages"
+RUN echo "chmod 0700 /home/$USER" >> ~/.bashrc
+
 CMD ["bash"]
