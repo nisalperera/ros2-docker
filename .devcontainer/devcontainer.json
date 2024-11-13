@@ -17,8 +17,8 @@
       "source=${localWorkspaceFolder}/remove.sh,target=/home/ubuntu/projects/remove.sh,type=bind",
       "source=${localWorkspaceFolder}/setup.sh,target=/home/ubuntu/projects/setup.sh,type=bind",
       "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/models,target=/usr/share/gazebo-11/models,type=bind",
-      "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/worlds,target=/usr/share/gazebo-11/worlds,type=bind"
-      // "source=${localWorkspaceFolder}/bashrc,target=/home/ubuntu/.bashrc,type=bind"
+      "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/worlds,target=/usr/share/gazebo-11/worlds,type=bind",
+      "source=${localWorkspaceFolder}/.ros,target=/home/ubuntu/.ros,type=bind"
     ],
     // "postCreateCommand": "chmod +x remove.sh && sh remove.sh",
     "postCreateCommand": "chmod +x setup.sh && sh setup.sh",

@@ -67,9 +67,12 @@ RUN sudo rm -rf /etc/localtime && sudo ln -s /usr/share/zoneinfo/Asia/Colombo /e
 
 RUN . /opt/ros/humble/setup.sh
 
+RUN sudo rm -rf /var/lib/apt/lists/*
+
 RUN echo "\\nRosdep update \\n"
 # Rosdep update
 RUN rosdep update
+
 
 RUN echo "\\nSource the ROS setup file and final configs \\n"
 # Source the ROS setup file
