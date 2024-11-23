@@ -168,6 +168,7 @@ cython_debug/
 !.gitignore
 !.devcontainer/*
 !remove.sh
+!setup.sh
 !bashrc
 
 # ...even if they are in subdirectories

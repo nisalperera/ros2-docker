@@ -6,23 +6,39 @@
       "--network=host",
       "--ipc=host",
       "-e QT_X11_NO_MITSHM=1",
-      "--volume=/tmp/.X11-unix:/tmp/.X11-unix"
+      "--volume=/tmp/.X11-unix:/tmp/.X11-unix",
+      "--gpus=all",
+      "--name=ROS2-humble"
     ],
     "workspaceFolder": "/home/ubuntu/projects",
-    "workspaceMount": "source=${localWorkspaceFolder}/ws/src,target=/home/ubuntu/projects,type=bind",
+    "workspaceMount": "source=${localWorkspaceFolder}/projects,target=/home/ubuntu/projects,type=bind",
     "mounts": [
       "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/ubuntu/.bash_history,type=bind",
       "source=${localWorkspaceFolder}/remove.sh,target=/home/ubuntu/projects/remove.sh,type=bind",
-      "source=${localWorkspaceFolder}/gazebo_models,target=/usr/share/gazebo-11/models,type=bind",
-      "source=${localWorkspaceFolder}/gazebo_worlds,target=/usr/share/gazebo-11/worlds,type=bind"
-      // "source=${localWorkspaceFolder}/bashrc,target=/home/ubuntu/.bashrc,type=bind"
+      "source=${localWorkspaceFolder}/setup.sh,target=/home/ubuntu/projects/setup.sh,type=bind",
+      "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/models,target=/usr/share/gazebo-11/models,type=bind",
+      "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/worlds,target=/usr/share/gazebo-11/worlds,type=bind",
+      "source=${localWorkspaceFolder}/.ros,target=/home/ubuntu/.ros,type=bind"
     ],
-    "postCreateCommand": "chmod +x remove.sh && sh remove.sh",
+    // "postCreateCommand": "chmod +x remove.sh && sh remove.sh",
+    "postCreateCommand": "chmod +x setup.sh && sh setup.sh",
     
     "build": { 
       "args": {
           "ROS_DISTRO": "humble"
         }
+    },
+
+    "customizations": {
+      // Configure properties specific to VS Code.
+      "vscode": {
+        // Add the IDs of extensions you want installed when the container is created.
+        "extensions": [
+          "ms-vscode.makefile-tools",
+          "ms-python.python",
+          "ms-toolsai.jupyter"
+        ]
+      }
     },
     
     "containerEnv": {
