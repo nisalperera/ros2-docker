@@ -1,14 +1,5 @@
-ARG ROS_DISTRO=foxy
-# FROM nvidia/cuda:12.2.0-devel-ubuntu22.04 AS cuda_base
-# ARG ROS_DISTRO=$ROS_DISTRO
-
+ARG ROS_DISTRO=humble
 FROM osrf/ros:${ROS_DISTRO}-desktop-full
-
-# Set environment variables for NVIDIA
-ENV NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
-ENV NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
-
-# COPY --from=cuda-stage /usr/local /usr/local
 
 # Add ubuntu user with same UID and GID as your host system, if it doesn't already exist
 # Since Ubuntu 24.04, a non-root user is created by default with the name vscode and UID=1000
@@ -59,13 +50,16 @@ RUN echo "\\nInstall ros2 packages including Gazebo \\n"
 # Install ros2 packages including Gazebo 
 RUN sudo apt-get -y install ros-${ROS_DISTRO}-ros-gz ros-${ROS_DISTRO}-gazebo-ros-pkgs ros-${ROS_DISTRO}-joint-state-publisher-gui htop
 
-RUN echo "\\nInstalling pytorch numpy and ultralytics and OpenCV... \\n"
-RUN pip3 install numpy==1.24.* torch==2.4.1 torchvision==0.19.1
-RUN pip3 install ultralytics opencv-python lap 
+ARG ULTRALYTICS=false
+RUN if [ "$ULTRALYTICS" = "true" ]; then \
+        echo "\\nInstalling pytorch numpy and ultralytics and OpenCV... \\n" && \
+        pip3 install numpy==1.24.* torch==2.4.1 torchvision==0.19.1 && \
+        pip3 install ultralytics opencv-python lap; \
+    fi
 
 RUN sudo rm -rf /etc/localtime && sudo ln -s /usr/share/zoneinfo/Asia/Colombo /etc/localtime
 
-RUN . /opt/ros/humble/setup.sh
+RUN . /opt/ros/${ROS_DISTRO}/setup.sh
 
 RUN sudo rm -rf /var/lib/apt/lists/*
 
@@ -78,7 +72,7 @@ RUN echo "\\nSource the ROS setup file and final configs \\n"
 # Source the ROS setup file
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
 RUN echo "export XDG_RUNTIME_DIR=/home/$USER" >> ~/.bashrc
-RUN echo "export PYTHONPATH=$PYTHONPATH:$HOME/.local/lib/python3.10/site-packages"
+# RUN echo "export PYTHONPATH=$PYTHONPATH:$HOME/.local/lib/python3.10/site-packages"
 RUN echo "chmod 0700 /home/$USER" >> ~/.bashrc
 
 CMD ["bash"]

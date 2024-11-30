@@ -36,7 +36,8 @@
         "extensions": [
           "ms-vscode.makefile-tools",
           "ms-python.python",
-          "ms-toolsai.jupyter"
+          "ms-toolsai.jupyter",
+          "ms-python.debugpy"
         ]
       }
     },
