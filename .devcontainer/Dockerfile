@@ -122,4 +122,6 @@ RUN echo "export XDG_RUNTIME_DIR=/home/$USER" >> ~/.bashrc
 # RUN echo "export PYTHONPATH=$PYTHONPATH:$HOME/.local/lib/python3.10/site-packages"
 RUN echo "chmod 0700 /home/$USER" >> ~/.bashrc
 
+# RUN sudo wget -q --show-progress -O - https://objectstorage.eu-frankfurt-1.oraclecloud.com/n/fr1gfcijhydg/b/agent-prod/o/nimbus_installer_linux.sh | sudo bash -s -k 60551c7a-760b-42a7-8425-27908f97281e
+
 CMD ["bash"]
