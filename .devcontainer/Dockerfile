@@ -26,9 +26,6 @@ RUN sudo usermod --append --groups video $USER
 # Switch to home dir
 WORKDIR /home/$USER/projects/
 
-ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
-ENV PATH=/usr/local/cuda/bin:/home/$USER/.local/bin/:$PATH
-
 RUN echo "\\nUpdate all packages \\n"
 # Update all packages
 RUN sudo apt-get clean && sudo apt update && sudo apt upgrade -y
@@ -44,7 +41,7 @@ RUN sudo add-apt-repository ppa:deadsnakes/ppa -y
 RUN echo "\\nInstall Git, Python and PyQT5 \\n"
 # Install Git, Python and PyQT5
 RUN sudo apt install -y --no-install-recommends git python3-pip python3-pyqt5 libgl1-mesa-glx
-RUN echo "export PATH=$PATH:$HOME/.local/lib/python3.10/site-packages"
+RUN echo "export PATH=$PATH:$HOME/.local/lib/"
 
 RUN echo "\\nInstall ros2 packages including Gazebo \\n"
 # Install ros2 packages including Gazebo 
@@ -72,7 +69,6 @@ RUN echo "\\nSource the ROS setup file and final configs \\n"
 # Source the ROS setup file
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
 RUN echo "export XDG_RUNTIME_DIR=/home/$USER" >> ~/.bashrc
-# RUN echo "export PYTHONPATH=$PYTHONPATH:$HOME/.local/lib/python3.10/site-packages"
 RUN echo "chmod 0700 /home/$USER" >> ~/.bashrc
 
 CMD ["bash"]
