@@ -2,27 +2,28 @@
 	"name": "ROS 2 desktop-full",
 	"dockerFile": "Dockerfile",
 	"runArgs": [
-		"--privileged",
 		"--network=host",
 		"--ipc=host",
 		"-e QT_X11_NO_MITSHM=1",
 		"--gpus=all",
+		"--device=/dev/bus/usb",
 		"--name=ROS2-humble"
 	],
 	"workspaceFolder": "/home/ubuntu/projects",
-	"workspaceMount": "source=${localWorkspaceFolder},target=/home/ubuntu/projects,type=bind,consistency=cached",
+	"workspaceMount": "source=${localWorkspaceFolder}/projects,target=/home/ubuntu/projects,type=bind,consistency=cached",
 	"mounts": [
-		"source=${localEnv:USERPROFILE}\\.bash_history,target=/home/ubuntu/.bash_history,type=bind",
+		// "source=${localEnv:USERPROFILE}\\.bash_history,target=/home/ubuntu/.bash_history,type=bind",
 		"source=${localWorkspaceFolder}\\remove.sh,target=/home/ubuntu/projects/remove.sh,type=bind",
 		"source=${localWorkspaceFolder}\\setup.sh,target=/home/ubuntu/projects/setup.sh,type=bind",
-		"source=${localWorkspaceFolder}\\gazebo_models_worlds_collection\\models,target=/usr/share/gazebo-11/models,type=bind",
-		"source=${localWorkspaceFolder}\\gazebo_models_worlds_collection\\worlds,target=/usr/share/gazebo-11/worlds,type=bind",
+		// "source=${localWorkspaceFolder}\\gazebo_models_worlds_collection\\models,target=/usr/share/gazebo-11/models,type=bind",
+		// "source=${localWorkspaceFolder}\\gazebo_models_worlds_collection\\worlds,target=/usr/share/gazebo-11/worlds,type=bind",
 		"source=${localWorkspaceFolder}\\.ros,target=/home/ubuntu/.ros,type=bind"
 	],
 	"postCreateCommand": "chmod +x setup.sh && sh setup.sh",
 	"build": {
 		"args": {
-			"ROS_DISTRO": "humble"
+			"ROS_DISTRO": "humble",
+			 "PACKAGES": "mobile_robot"
 		}
 	},
 	"customizations": {
@@ -30,12 +31,15 @@
 			"extensions": [
 				"ms-vscode.makefile-tools",
 				"ms-python.python",
-				"ms-toolsai.jupyter"
+				"ms-toolsai.jupyter",
+				"ms-python.debugpy"
 			]
 		}
 	},
 	"containerEnv": {
-		"DISPLAY": "${localEnv:DISPLAY}"
+		// "DISPLAY": "${localEnv:DISPLAY}",
+		"DISPLAY": "host.docker.internal:0.0",
+		"LIBGL_ALWAYS_INDIRECT": "0"
 	},
 	"remoteEnv": {
 		"DOCKER_BUILDKIT": "0"
