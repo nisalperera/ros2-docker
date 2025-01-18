@@ -23,7 +23,7 @@
 	"build": {
 		"args": {
 			"ROS_DISTRO": "humble",
-			 "PACKAGES": "mobile_robot"
+			 "PACKAGES": ""
 		}
 	},
 	"customizations": {
