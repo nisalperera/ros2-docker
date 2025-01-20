@@ -15,8 +15,8 @@
 		// "source=${localEnv:USERPROFILE}\\.bash_history,target=/home/ubuntu/.bash_history,type=bind",
 		"source=${localWorkspaceFolder}\\remove.sh,target=/home/ubuntu/projects/remove.sh,type=bind",
 		"source=${localWorkspaceFolder}\\setup.sh,target=/home/ubuntu/projects/setup.sh,type=bind",
-		// "source=${localWorkspaceFolder}\\gazebo_models_worlds_collection\\models,target=/usr/share/gazebo-11/models,type=bind",
-		// "source=${localWorkspaceFolder}\\gazebo_models_worlds_collection\\worlds,target=/usr/share/gazebo-11/worlds,type=bind",
+		"source=${localWorkspaceFolder}\\gazebo_models_worlds_collection\\models,target=/usr/share/gazebo-11/models,type=bind",
+		"source=${localWorkspaceFolder}\\gazebo_models_worlds_collection\\worlds,target=/usr/share/gazebo-11/worlds,type=bind",
 		"source=${localWorkspaceFolder}\\.ros,target=/home/ubuntu/.ros,type=bind"
 	],
 	"postCreateCommand": "chmod +x setup.sh && sh setup.sh",
@@ -39,7 +39,8 @@
 	"containerEnv": {
 		// "DISPLAY": "${localEnv:DISPLAY}",
 		"DISPLAY": "host.docker.internal:0.0",
-		"LIBGL_ALWAYS_INDIRECT": "0"
+		"LIBGL_ALWAYS_INDIRECT": "0",
+		"ROS_DOMAIN_ID": "0"
 	},
 	"remoteEnv": {
 		"DOCKER_BUILDKIT": "0"
