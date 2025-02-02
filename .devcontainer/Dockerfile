@@ -19,11 +19,12 @@ RUN apt-get update && \
 
 # Switch from root to user
 USER $USER
+ENV HOME=/home/$USER/
 
 # Add user to video group to allow access to webcam
 RUN sudo usermod --append --groups video $USER
 
-# Switch to home dir
+# Switch to projects dir
 WORKDIR /home/$USER/projects/
 
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
@@ -48,7 +49,9 @@ RUN sudo apt install -y --no-install-recommends \
     python3-pip \
     python3-pyqt5 \
     python3-serial \
-    libgl1-mesa-glx \
+    # libgl1-mesa-glx \
+    libgl1 \
+    libglx-mesa0 \
     joystick \
     evtest \
     jstest-gtk
@@ -57,19 +60,31 @@ RUN echo "export PATH=$PATH:$HOME/.local/lib/python3.10/site-packages"
 
 RUN echo "\\nInstall ros2 packages including Gazebo \\n"
 # Install ros2 packages including Gazebo 
+
+RUN sudo apt-get update && \
+    sudo apt-get install \
+        curl \
+        lsb-release \
+        gnupg
+
+RUN sudo curl https://packages.osrfoundation.org/gazebo.gpg --output /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null
+RUN sudo apt-get update
+RUN sudo apt-get install -y gz-harmonic
+
 RUN sudo apt-get -y install \
     ros-${ROS_DISTRO}-ros-gz \
-    ros-${ROS_DISTRO}-gazebo-ros-pkgs \
     ros-${ROS_DISTRO}-joint-state-publisher-gui \
     ros-${ROS_DISTRO}-controller-manager \
     ros-${ROS_DISTRO}-twist-mux \
+    ros-${ROS_DISTRO}-twist-stamper \
     ros-${ROS_DISTRO}-slam-toolbox \
     ros-${ROS_DISTRO}-controller-manager \
     ros-${ROS_DISTRO}-joint-trajectory-controller \
     ros-${ROS_DISTRO}-joint-state-broadcaster \
     ros-${ROS_DISTRO}-ros2-control \
     ros-${ROS_DISTRO}-ros2-controllers \
-    ros-${ROS_DISTRO}-gazebo-ros2-control \
+    ros-${ROS_DISTRO}-ign-ros2-control \
     ros-${ROS_DISTRO}-navigation2 \
     ros-${ROS_DISTRO}-nav2-bringup \
     htop
@@ -111,5 +126,10 @@ RUN sudo sh -c 'echo "@realtime soft memlock 102400" >> /etc/security/limits.con
 RUN sudo sh -c 'echo "@realtime hard rtprio 99" >> /etc/security/limits.conf'
 RUN sudo sh -c 'echo "@realtime hard priority 99" >> /etc/security/limits.conf'
 RUN sudo sh -c 'echo "@realtime hard memlock 102400" >> /etc/security/limits.conf'
+
+ENV GZ_VERSION=harmonic
+
+RUN echo "export GZ_SIM_RESOURCE_PATH=$HOME/models:$HOME/worlds:$GZ_SIM_RESOURCE_PATH" > $HOME/.bashrc
+RUN echo "export IGN_GAZEBO_RESOURCE_PATH=$HOME/models:$HOME/worlds:$IGN_GAZEBO_RESOURCE_PATH" > $HOME/.bashrc
 
 CMD ["bash"]
