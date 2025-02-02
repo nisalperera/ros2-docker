@@ -2,14 +2,12 @@
     "name": "ROS 2 desktop-full",
     "dockerFile": "Dockerfile",
     "runArgs": [
-      // "--privileged",
       "--network=host",
       "--ipc=host",
       "-e QT_X11_NO_MITSHM=1",
       "--volume=/tmp/.X11-unix:/tmp/.X11-unix",
       "--gpus=all",
       "--device-cgroup-rule=c 13:* rmw",
-      // "--device=/dev/input/js0",
       "--name=ROS2-humble"
     ],
     "workspaceFolder": "/home/ubuntu/projects",
@@ -28,7 +26,7 @@
     "build": { 
       "args": {
           "ROS_DISTRO": "humble",
-          "PACKAGES": "mobile_robot joy_tester"
+          "PACKAGES": "mobile_robot"
         }
     },
 
