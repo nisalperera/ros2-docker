@@ -8,7 +8,7 @@
       "--volume=/tmp/.X11-unix:/tmp/.X11-unix",
       "--gpus=all",
       "--device-cgroup-rule=c 13:* rmw",
-      "--name=ROS2-humble"
+      "--name=ROS2-Jazzy"
     ],
     "workspaceFolder": "/home/ubuntu/projects",
     "workspaceMount": "source=${localWorkspaceFolder}/projects,target=/home/ubuntu/projects,type=bind",
@@ -16,8 +16,8 @@
       "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/ubuntu/.bash_history,type=bind",
       "source=${localWorkspaceFolder}/remove.sh,target=/home/ubuntu/projects/remove.sh,type=bind",
       "source=${localWorkspaceFolder}/setup.sh,target=/home/ubuntu/projects/setup.sh,type=bind",
-      "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/models,target=/usr/share/gazebo-11/models,type=bind",
-      "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/worlds,target=/usr/share/gazebo-11/worlds,type=bind",
+      "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/models,target=/home/ubuntu/models,type=bind",
+      "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/worlds,target=/home/ubuntu/worlds,type=bind",
       "source=${localWorkspaceFolder}/.ros,target=/home/ubuntu/.ros,type=bind",
       "source=/dev/input,target=/dev/input,type=bind"
     ],
@@ -25,7 +25,7 @@
     
     "build": { 
       "args": {
-          "ROS_DISTRO": "humble",
+          "ROS_DISTRO": "jazzy",
           "PACKAGES": "mobile_robot"
         }
     },
