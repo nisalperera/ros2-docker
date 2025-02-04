@@ -14,12 +14,12 @@
     "workspaceMount": "source=${localWorkspaceFolder}/projects,target=/home/ubuntu/projects,type=bind",
     "mounts": [
       "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/ubuntu/.bash_history,type=bind",
-      "source=${localWorkspaceFolder}/remove.sh,target=/home/ubuntu/projects/remove.sh,type=bind",
-      "source=${localWorkspaceFolder}/setup.sh,target=/home/ubuntu/projects/setup.sh,type=bind",
       "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/models,target=/home/ubuntu/models,type=bind",
       "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/worlds,target=/home/ubuntu/worlds,type=bind",
+      "source=${localWorkspaceFolder}/remove.sh,target=/home/ubuntu/projects/remove.sh,type=bind",
+      "source=${localWorkspaceFolder}/setup.sh,target=/home/ubuntu/projects/setup.sh,type=bind",
       "source=${localWorkspaceFolder}/.ros,target=/home/ubuntu/.ros,type=bind",
-      "source=/dev/input,target=/dev/input,type=bind"
+      "source=/dev/dri,target=/dev/dri,type=bind"
     ],
     "postCreateCommand": "chmod +x setup.sh && bash setup.sh",
     
@@ -28,7 +28,7 @@
           "ROS_DISTRO": "humble",
           "PACKAGES": "mobile_robot"
         },
-      "tag": "ros2-humble:latest"
+      "tag": "ros2-humble"
     },
 
     "customizations": {

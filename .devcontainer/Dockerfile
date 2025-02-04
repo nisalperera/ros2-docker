@@ -129,7 +129,9 @@ RUN sudo sh -c 'echo "@realtime hard memlock 102400" >> /etc/security/limits.con
 
 ENV GZ_VERSION=harmonic
 
-RUN echo "export GZ_SIM_RESOURCE_PATH=$HOME/models:$HOME/worlds:$GZ_SIM_RESOURCE_PATH" > $HOME/.bashrc
-RUN echo "export IGN_GAZEBO_RESOURCE_PATH=$HOME/models:$HOME/worlds:$IGN_GAZEBO_RESOURCE_PATH" > $HOME/.bashrc
+RUN echo "export GZ_SIM_RESOURCE_PATH=$HOME/models:$HOME/worlds:$GZ_SIM_RESOURCE_PATH" >> $HOME/.bashrc
+RUN echo "export IGN_GAZEBO_RESOURCE_PATH=$HOME/models:$HOME/worlds:$IGN_GAZEBO_RESOURCE_PATH" >> $HOME/.bashrc
+
+RUN sudo chmod +r /opt/ros/${ROS_DISTRO}/setup.bash
 
 CMD ["bash"]
