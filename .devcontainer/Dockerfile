@@ -12,8 +12,8 @@ RUN if ! id -u $UID >/dev/null 2>&1; then \
         useradd -s /bin/bash --uid $UID --gid $GID -m $USER; \
     fi
 # Add sudo support for the non-root user
-RUN apt-get update && \
-    apt-get install -y sudo && \
+RUN apt update && \
+    apt install -y sudo && \
     echo "$USER ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USER && \
     chmod 0440 /etc/sudoers.d/$USER
 
@@ -30,15 +30,69 @@ WORKDIR /home/$USER/projects/
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 ENV PATH=/usr/local/cuda/bin:/home/$USER/.local/bin/:$PATH
 
+RUN sudo rm -rf /etc/localtime && sudo ln -s /usr/share/zoneinfo/Asia/Colombo /etc/localtime
+
 RUN echo "\\nUpdate all packages \\n"
 # Update all packages
-RUN sudo apt-get clean && sudo apt update && sudo apt upgrade -y
+RUN sudo apt clean && sudo apt update && sudo apt upgrade -y
 
-RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
+RUN sudo apt update && sudo apt install -y --no-install-recommends \
     wget \
-    software-properties-common && \
+    gcc \
+    g++ \
+    curl \
+    lsb-release \
+    gnupg \
+    freeglut3-dev \
+    build-essential \
+    dirmngr \
+    ca-certificates \
+    software-properties-common \
+    apt-transport-https \
+    dkms \
+    curl -y && \
     sudo rm -rf /var/lib/apt/lists/*
 
+ARG CUDA=false
+ENV CUDA=${CUDA}
+RUN if [ "$CUDA" = "true" ]; then \
+        echo "\\Install CUDA toolkit\\n" && \
+        sudo apt-key del 7fa2af80 && \
+        wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb && \
+        sudo dpkg -i cuda-keyring_1.0-1_all.deb && \
+        sudo apt update && \
+        sudo apt install -y cuda-toolkit-11-8 \
+                            libcudnn8=8.6.0.163-1+cuda11.8 \
+                            libnvinfer8=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-plugin8=8.6.1.6-1+cuda11.8 \
+                            libnvparsers8=8.6.1.6-1+cuda11.8 \
+                            libnvonnxparsers8=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-bin=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-lean8=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-vc-plugin8=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-dispatch8=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-vc-plugin8=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-lean8=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-dispatch8=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-dev=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-lean-dev=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-plugin-dev=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-vc-plugin-dev=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-dispatch-dev=8.6.1.6-1+cuda11.8 \
+                            libnvparsers-dev=8.6.1.6-1+cuda11.8 \
+                            libnvonnxparsers-dev=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-samples=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-headers-dev=8.6.1.6-1+cuda11.8 \
+                            libcudnn8-dev=8.6.0.163-1+cuda11.8 \
+                            libnvinfer-headers-dev=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-headers-dev=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-headers-plugin-dev=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-headers-plugin-dev=8.6.1.6-1+cuda11.8 \
+                            tensorrt=8.6.1.6-1+cuda11.8 \
+                            libnvinfer-bin=8.6.1.6-1+cuda11.8; \
+    fi
+
+# RUN sudo rm -rf cuda_12.2.2_535.104.05_linux.run
 RUN echo "\\nAdding Deadsnakes PPA\\n"
 RUN sudo add-apt-repository ppa:deadsnakes/ppa -y
 
@@ -61,18 +115,15 @@ RUN echo "export PATH=$PATH:$HOME/.local/lib/python3.10/site-packages"
 RUN echo "\\nInstall ros2 packages including Gazebo \\n"
 # Install ros2 packages including Gazebo 
 
-RUN sudo apt-get update && \
-    sudo apt-get install \
-        curl \
-        lsb-release \
-        gnupg
+# RUN sudo apt update && \
+#     sudo apt install 
 
 RUN sudo curl https://packages.osrfoundation.org/gazebo.gpg --output /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null
-RUN sudo apt-get update
-RUN sudo apt-get install -y gz-harmonic
+RUN sudo apt update
+RUN sudo apt install -y gz-harmonic
 
-RUN sudo apt-get -y install \
+RUN sudo apt -y install \
     ros-${ROS_DISTRO}-ros-gz \
     ros-${ROS_DISTRO}-joint-state-publisher-gui \
     ros-${ROS_DISTRO}-controller-manager \
@@ -97,8 +148,6 @@ RUN if [ "$ULTRALYTICS" = "true" ]; then \
         pip3 install ultralytics opencv-python lap; \
     fi
 
-RUN sudo rm -rf /etc/localtime && sudo ln -s /usr/share/zoneinfo/Asia/Colombo /etc/localtime
-
 RUN . /opt/ros/${ROS_DISTRO}/setup.sh
 
 RUN sudo rm -rf /var/lib/apt/lists/*
@@ -119,6 +168,9 @@ RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
 RUN echo "export XDG_RUNTIME_DIR=/home/$USER" >> ~/.bashrc
 RUN echo "export BUILD_PACKAGES=$BUILD_PACKAGES" >> ~/.bashrc
 RUN echo "chmod 0700 /home/$USER" >> ~/.bashrc
+RUN echo 'export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}' >> ~/.bashrc
+RUN echo 'export LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}' >> ~/.bashrc
+
 
 RUN sudo sh -c 'echo "@realtime soft rtprio 99" >> /etc/security/limits.conf'
 RUN sudo sh -c 'echo "@realtime soft priority 99" >> /etc/security/limits.conf'
@@ -129,8 +181,8 @@ RUN sudo sh -c 'echo "@realtime hard memlock 102400" >> /etc/security/limits.con
 
 ENV GZ_VERSION=harmonic
 
-RUN echo "export GZ_SIM_RESOURCE_PATH=$HOME/models:$HOME/worlds:$GZ_SIM_RESOURCE_PATH" >> $HOME/.bashrc
-RUN echo "export IGN_GAZEBO_RESOURCE_PATH=$HOME/models:$HOME/worlds:$IGN_GAZEBO_RESOURCE_PATH" >> $HOME/.bashrc
+RUN echo "export GZ_SIM_RESOURCE_PATH=$HOME/gazebo/:$HOME/gazebo/:$GZ_SIM_RESOURCE_PATH" >> $HOME/.bashrc
+RUN echo "export IGN_GAZEBO_RESOURCE_PATH=$HOME/gazebo/:$IGN_GAZEBO_RESOURCE_PATH" >> $HOME/.bashrc
 
 RUN sudo chmod +r /opt/ros/${ROS_DISTRO}/setup.bash
 
