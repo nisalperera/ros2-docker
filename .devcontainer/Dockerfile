@@ -1,8 +1,4 @@
-FROM nvidia/cuda:12.2.0-runtime-ubuntu22.04 as build-stage
-
-FROM osrf/ros:foxy-desktop as final-stage
-
-COPY --from=build-stage /usr/local /usr/local
+FROM osrf/ros:foxy-desktop
 
 # Add ubuntu user with same UID and GID as your host system, if it doesn't already exist
 # Since Ubuntu 24.04, a non-root user is created by default with the name vscode and UID=1000
@@ -28,8 +24,5 @@ RUN sudo usermod --append --groups video $USER
 
 # Switch to home dir
 WORKDIR /home/$USER/projects/
-
-ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
-ENV PATH=/usr/local/cuda/bin:/home/$USER/.local/bin/:$PATH
 
 CMD ["bash"]
