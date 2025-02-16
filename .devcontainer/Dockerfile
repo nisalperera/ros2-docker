@@ -103,7 +103,6 @@ RUN sudo apt install -y --no-install-recommends \
     python3-pip \
     python3-pyqt5 \
     python3-serial \
-    # libgl1-mesa-glx \
     libgl1 \
     libglx-mesa0 \
     joystick \
@@ -115,11 +114,11 @@ RUN echo "export PATH=$PATH:$HOME/.local/lib/python3.10/site-packages"
 RUN echo "\\nInstall ros2 packages including Gazebo \\n"
 # Install ros2 packages including Gazebo 
 
-# RUN sudo apt update && \
-#     sudo apt install 
-
 RUN sudo curl https://packages.osrfoundation.org/gazebo.gpg --output /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg
-RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] \
+          http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | \
+          sudo tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null
+          
 RUN sudo apt update
 RUN sudo apt install -y gz-harmonic
 
@@ -149,8 +148,6 @@ RUN if [ "$ULTRALYTICS" = "true" ]; then \
     fi
 
 RUN . /opt/ros/${ROS_DISTRO}/setup.sh
-
-RUN sudo rm -rf /var/lib/apt/lists/*
 
 RUN echo "\\nRosdep update \\n"
 # Rosdep update
@@ -185,5 +182,7 @@ RUN echo "export GZ_SIM_RESOURCE_PATH=$HOME/gazebo/:$HOME/gazebo/:$GZ_SIM_RESOUR
 RUN echo "export IGN_GAZEBO_RESOURCE_PATH=$HOME/gazebo/:$IGN_GAZEBO_RESOURCE_PATH" >> $HOME/.bashrc
 
 RUN sudo chmod +r /opt/ros/${ROS_DISTRO}/setup.bash
+
+RUN sudo rm -rf /var/lib/apt/lists/*
 
 CMD ["bash"]

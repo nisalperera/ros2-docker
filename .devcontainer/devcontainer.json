@@ -28,7 +28,7 @@
     "args": {
       "ROS_DISTRO": "humble",
       "PACKAGES": "mobile_robot",
-      "CUDA": "true"
+      "CUDA": "false"
     },
     "tag": "ros2-humble"
   },
