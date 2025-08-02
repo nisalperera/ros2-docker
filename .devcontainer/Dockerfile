@@ -90,7 +90,7 @@ RUN sudo rm -rf /var/lib/apt/lists/*
 
 RUN echo "\\nRosdep update \\n"
 # Rosdep update
-RUN rosdep update
+# RUN rosdep update
 
 # Install lowlatency kernel
 RUN sudo apt update && sudo apt install linux-lowlatency -y
@@ -111,5 +111,7 @@ RUN sudo sh -c 'echo "@realtime soft memlock 102400" >> /etc/security/limits.con
 RUN sudo sh -c 'echo "@realtime hard rtprio 99" >> /etc/security/limits.conf'
 RUN sudo sh -c 'echo "@realtime hard priority 99" >> /etc/security/limits.conf'
 RUN sudo sh -c 'echo "@realtime hard memlock 102400" >> /etc/security/limits.conf'
+
+RUN pip3 install setuptools==58.2.0
 
 CMD ["bash"]
