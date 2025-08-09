@@ -56,41 +56,33 @@ RUN sudo apt update && sudo apt install -y --no-install-recommends \
 ARG CUDA=false
 ENV CUDA=${CUDA}
 RUN if [ "$CUDA" = "true" ]; then \
-        echo "\\Install CUDA toolkit\\n" && \
+        echo "\nInstall CUDA toolkit\n" && \
+        # The following command removes an old key.
+        # It may not be necessary for a fresh installation.
         sudo apt-key del 7fa2af80 && \
-        wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb && \
-        sudo dpkg -i cuda-keyring_1.0-1_all.deb && \
-        sudo apt update && \
-        sudo apt install -y cuda-toolkit-11-8 \
-                            libcudnn8=8.6.0.163-1+cuda11.8 \
-                            libnvinfer8=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-plugin8=8.6.1.6-1+cuda11.8 \
-                            libnvparsers8=8.6.1.6-1+cuda11.8 \
-                            libnvonnxparsers8=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-bin=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-lean8=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-vc-plugin8=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-dispatch8=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-vc-plugin8=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-lean8=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-dispatch8=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-dev=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-lean-dev=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-plugin-dev=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-vc-plugin-dev=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-dispatch-dev=8.6.1.6-1+cuda11.8 \
-                            libnvparsers-dev=8.6.1.6-1+cuda11.8 \
-                            libnvonnxparsers-dev=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-samples=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-headers-dev=8.6.1.6-1+cuda11.8 \
-                            libcudnn8-dev=8.6.0.163-1+cuda11.8 \
-                            libnvinfer-headers-dev=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-headers-dev=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-headers-plugin-dev=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-headers-plugin-dev=8.6.1.6-1+cuda11.8 \
-                            tensorrt=8.6.1.6-1+cuda11.8 \
-                            libnvinfer-bin=8.6.1.6-1+cuda11.8; \
+        # Fetches the new keyring for CUDA 12.1 on Ubuntu 22.04
+        wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb && \
+        sudo dpkg -i cuda-keyring_1.1-1_all.deb && \
+        # Cleans up the downloaded keyring file
+        rm cuda-keyring_1.1-1_all.deb && \
+        sudo apt-get update && \
+        # Installs CUDA 12.1, cuDNN 8.9.0, and TensorRT 8.6.1
+        sudo apt-get install -y cuda-toolkit-12-1 \
+                            libcudnn8=8.9.0.131-1+cuda12.1 \
+                            libcudnn8-dev=8.9.0.131-1+cuda12.1 \
+                            libnvinfer8=8.6.1.6-1+cuda12.1 \
+                            libnvinfer-bin=8.6.1.6-1+cuda12.1 \
+                            libnvinfer-dev=8.6.1.6-1+cuda12.1 \
+                            libnvinfer-plugin8=8.6.1.6-1+cuda12.1 \
+                            libnvinfer-plugin-dev=8.6.1.6-1+cuda12.1 \
+                            libnvparsers8=8.6.1.6-1+cuda12.1 \
+                            libnvparsers-dev=8.6.1.6-1+cuda12.1 \
+                            libnvonnxparsers8=8.6.1.6-1+cuda12.1 \
+                            libnvonnxparsers-dev=8.6.1.6-1+cuda12.1 \
+                            libnvinfer-samples=8.6.1.6-1+cuda12.1 \
+                            tensorrt=8.6.1.6-1+cuda12.1; \
     fi
+
 
 # RUN sudo rm -rf cuda_12.2.2_535.104.05_linux.run
 RUN echo "\\nAdding Deadsnakes PPA\\n"
@@ -166,7 +158,7 @@ RUN echo "export XDG_RUNTIME_DIR=/home/$USER" >> ~/.bashrc
 RUN echo "export BUILD_PACKAGES=$BUILD_PACKAGES" >> ~/.bashrc
 RUN echo "chmod 0700 /home/$USER" >> ~/.bashrc
 RUN echo 'export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}' >> ~/.bashrc
-RUN echo 'export LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}' >> ~/.bashrc
+RUN echo 'export LD_LIBRARY_PATH=/usr/local/cuda-12.1/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}' >> ~/.bashrc
 
 
 RUN sudo sh -c 'echo "@realtime soft rtprio 99" >> /etc/security/limits.conf'
