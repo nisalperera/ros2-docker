@@ -75,7 +75,6 @@ RUN sudo apt-get -y install \
     htop
 
 ARG ULTRALYTICS=false
-ENV DEEPLEARNING=${ULTRALYTICS}
 RUN if [ "$ULTRALYTICS" = "true" ]; then \
         echo "\\nInstalling pytorch numpy and ultralytics and OpenCV... \\n" && \
         pip3 install numpy==1.24.* torch==2.4.1 torchvision==0.19.1 && \
@@ -112,6 +111,7 @@ RUN sudo sh -c 'echo "@realtime hard rtprio 99" >> /etc/security/limits.conf'
 RUN sudo sh -c 'echo "@realtime hard priority 99" >> /etc/security/limits.conf'
 RUN sudo sh -c 'echo "@realtime hard memlock 102400" >> /etc/security/limits.conf'
 
-RUN pip3 install setuptools==58.2.0
+# RUN pip3 install setuptools==58.2.0
+RUN mkdir -p /home/ubuntu/.config/jstest-gtk
 
 CMD ["bash"]
