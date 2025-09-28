@@ -13,6 +13,8 @@
   "workspaceMount": "source=${localWorkspaceFolder}/projects,target=/home/ubuntu/projects,type=bind",
   "mounts": [
     "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/ubuntu/.bash_history,type=bind",
+    "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/models,target=/home/ubuntu/gazebo/models,type=bind", // comment this line if you don't have gazebo models
+    "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/worlds,target=/home/ubuntu/gazebo/worlds,type=bind", // comment this line if you don't have gazebo worlds
     "source=${localWorkspaceFolder}/.ros,target=/home/ubuntu/.ros,type=bind",
     "source=/dev/dri,target=/dev/dri,type=bind",
     "source=/dev/input,target=/dev/input,type=bind"
