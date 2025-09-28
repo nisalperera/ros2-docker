@@ -36,6 +36,10 @@ This project is for building a minimal ROS2 environment using vscode devcontaine
 - You can also install additional packages when you are inside the container. (The above option is recommended)
 - Extend with additional setup scripts or entrypoints as needed.
 
+## TODO
+- Add GPU support
+- Cleanup Dockerfile and devcontainer.json
+
 ## License
 
 This repository is licensed under the BSD-3-Clause License.
