@@ -6,7 +6,6 @@
     "--ipc=host",
     "-e QT_X11_NO_MITSHM=1",
     "--volume=/tmp/.X11-unix:/tmp/.X11-unix",
-    "--gpus=all",
     "--device-cgroup-rule=c 13:* rmw",
     "--name=ROS2-humble"
   ],
@@ -14,22 +13,15 @@
   "workspaceMount": "source=${localWorkspaceFolder}/projects,target=/home/ubuntu/projects,type=bind",
   "mounts": [
     "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/ubuntu/.bash_history,type=bind",
-    "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/models,target=/home/ubuntu/gazebo/models,type=bind",
-    "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/worlds,target=/home/ubuntu/gazebo/worlds,type=bind",
-    "source=${localWorkspaceFolder}/remove.sh,target=/home/ubuntu/projects/remove.sh,type=bind",
-    "source=${localWorkspaceFolder}/setup.sh,target=/home/ubuntu/projects/setup.sh,type=bind",
     "source=${localWorkspaceFolder}/.ros,target=/home/ubuntu/.ros,type=bind",
     "source=/dev/dri,target=/dev/dri,type=bind",
     "source=/dev/input,target=/dev/input,type=bind"
   ],
-  "postCreateCommand": "chmod +x setup.sh && bash setup.sh",
   "build": {
     "context": "..",
     "dockerfile": "Dockerfile",
     "args": {
-      "ROS_DISTRO": "humble",
-      "PACKAGES": "mobile_robot",
-      "CUDA": "false"
+      "ROS_DISTRO": "humble"
     },
     "tag": "ros2-humble"
   },

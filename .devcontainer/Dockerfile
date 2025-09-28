@@ -74,13 +74,6 @@ RUN sudo apt-get -y install \
     ros-${ROS_DISTRO}-nav2-bringup \
     htop
 
-ARG ULTRALYTICS=false
-RUN if [ "$ULTRALYTICS" = "true" ]; then \
-        echo "\\nInstalling pytorch numpy and ultralytics and OpenCV... \\n" && \
-        pip3 install numpy==1.24.* torch==2.4.1 torchvision==0.19.1 && \
-        pip3 install ultralytics opencv-python lap; \
-    fi
-
 RUN sudo rm -rf /etc/localtime && sudo ln -s /usr/share/zoneinfo/Asia/Colombo /etc/localtime
 
 RUN . /opt/ros/${ROS_DISTRO}/setup.sh
@@ -94,14 +87,10 @@ RUN echo "\\nRosdep update \\n"
 # Install lowlatency kernel
 RUN sudo apt update && sudo apt install linux-lowlatency -y
 
-ARG PACKAGES="mobile_robot joy_tester"
-ENV BUILD_PACKAGES=${PACKAGES}
-
 RUN echo "\\nSource the ROS setup file and final configs \\n"
 # Source the ROS setup file
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
 RUN echo "export XDG_RUNTIME_DIR=/home/$USER" >> ~/.bashrc
-RUN echo "export BUILD_PACKAGES=$BUILD_PACKAGES" >> ~/.bashrc
 RUN echo "chmod 0700 /home/$USER" >> ~/.bashrc
 
 RUN sudo sh -c 'echo "@realtime soft rtprio 99" >> /etc/security/limits.conf'
