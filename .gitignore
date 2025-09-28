@@ -167,9 +167,7 @@ cython_debug/
 # # But not these files...
 !.gitignore
 !.devcontainer/*
-!remove.sh
-!setup.sh
-!bashrc
+!.ros/.gitkeep
 
 # ...even if they are in subdirectories
 # !*/

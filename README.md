@@ -4,8 +4,8 @@ This project is for building a minimal ROS2 environment using vscode devcontaine
 
 ## Features
 
-- Base ROS2 installation (specify distribution, e.g., Humble, Iron, etc.)
-- Clean, slim image intended for development and CI/CD
+- Full desktop ROS2 installation (specify distribution, e.g., Humble, Iron, etc.)
+- Clean, slim image intended for development
 - Easily extendable for custom robotics applications
 
 ## Getting Started
