@@ -17,6 +17,13 @@ Change the ```dockerfile``` section of [.devcontainer/devcontainer.json](./.devc
 
 ## Preinstalled ROS 2 Foxy packages (dev image only)
 
+The desktop image comes with only following stack:
+
+- `ros-foxy-gazebo-ros-pkgs` – Gazebo integration with ROS 2 plugins and utilities.
+- `ros-foxy-xacro` – Macro language support for generating URDF from xacro files.
+
+## Preinstalled ROS 2 Foxy packages (dev image only)
+
 The development image comes with a curated ROS 2 Foxy stack for simulation, control, and navigation:
 
 - `ros-foxy-gazebo-ros-pkgs` – Gazebo integration with ROS 2 plugins and utilities.  

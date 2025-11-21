@@ -1,3 +1,5 @@
+# ROS2 foxy basic desktop image
+
 ARG ROS_DISTRO=foxy
 FROM osrf/ros:${ROS_DISTRO}-desktop
 
@@ -6,7 +8,6 @@ ENV USER=$USER
 ARG UID=1000
 ARG GID=$UID
 ARG TIMEZONE=Asia/Colombo
-
 
 RUN if ! id -u $UID >/dev/null 2>&1; then \
         groupadd --gid $GID $USER && \
@@ -47,6 +48,12 @@ RUN sudo apt install -y --no-install-recommends \
     python3-pyqt5 \
     python3-serial \
     libgl1-mesa-glx
+
+# Install ros2 packages including Gazebo 
+RUN echo "\\nInstall xacro and Gazebo packages \\n"
+RUN sudo apt-get -y install \
+    ros-${ROS_DISTRO}-gazebo-ros-pkgs \
+    ros-${ROS_DISTRO}-xacro
 
 RUN sudo rm -rf /etc/localtime && sudo ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 

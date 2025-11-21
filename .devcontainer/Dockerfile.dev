@@ -1,3 +1,5 @@
+# ROS2 foxy basic desktop image
+
 ARG ROS_DISTRO=foxy
 FROM osrf/ros:${ROS_DISTRO}-desktop
 
@@ -6,7 +8,6 @@ ENV USER=$USER
 ARG UID=1000
 ARG GID=$UID
 ARG TIMEZONE=Asia/Colombo
-
 
 RUN if ! id -u $UID >/dev/null 2>&1; then \
         groupadd --gid $GID $USER && \
@@ -46,30 +47,13 @@ RUN sudo apt install -y --no-install-recommends \
     python3-pip \
     python3-pyqt5 \
     python3-serial \
-    libgl1-mesa-glx \
-    joystick \
-    evtest \
-    jstest-gtk
+    libgl1-mesa-glx
 
-RUN echo "\\nInstall ros2 packages including Gazebo \\n"
 # Install ros2 packages including Gazebo 
+RUN echo "\\nInstall xacro and Gazebo packages \\n"
 RUN sudo apt-get -y install \
     ros-${ROS_DISTRO}-gazebo-ros-pkgs \
-    ros-${ROS_DISTRO}-joint-state-publisher-gui \
-    ros-${ROS_DISTRO}-controller-manager \
-    ros-${ROS_DISTRO}-twist-mux \
-    ros-${ROS_DISTRO}-slam-toolbox \
-    ros-${ROS_DISTRO}-controller-manager \
-    ros-${ROS_DISTRO}-joint-trajectory-controller \
-    ros-${ROS_DISTRO}-joint-state-broadcaster \
-    ros-${ROS_DISTRO}-ros2-control \
-    ros-${ROS_DISTRO}-ros2-controllers \
-    ros-${ROS_DISTRO}-gazebo-ros2-control \
-    ros-${ROS_DISTRO}-navigation2 \
-    ros-${ROS_DISTRO}-nav2-bringup \
-    ros-${ROS_DISTRO}-xacro \
-    ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
-    htop
+    ros-${ROS_DISTRO}-xacro
 
 RUN sudo rm -rf /etc/localtime && sudo ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 
@@ -93,6 +77,30 @@ RUN sudo sh -c 'echo "@realtime soft memlock 102400" >> /etc/security/limits.con
 RUN sudo sh -c 'echo "@realtime hard rtprio 99" >> /etc/security/limits.conf'
 RUN sudo sh -c 'echo "@realtime hard priority 99" >> /etc/security/limits.conf'
 RUN sudo sh -c 'echo "@realtime hard memlock 102400" >> /etc/security/limits.conf'
+
+# ROS2 foxy dev desktop image
+# Install Joystick test packages
+RUN sudo apt install -y --no-install-recommends \
+    joystick \
+    evtest \
+    jstest-gtk
+
+# Install ros2 packages addition to the desktop image
+RUN echo "\\nInstall ros2 packages including Gazebo \\n"
+RUN sudo apt-get -y install \
+    ros-${ROS_DISTRO}-joint-state-publisher-gui \
+    ros-${ROS_DISTRO}-controller-manager \
+    ros-${ROS_DISTRO}-twist-mux \
+    ros-${ROS_DISTRO}-slam-toolbox \
+    ros-${ROS_DISTRO}-controller-manager \
+    ros-${ROS_DISTRO}-joint-trajectory-controller \
+    ros-${ROS_DISTRO}-joint-state-broadcaster \
+    ros-${ROS_DISTRO}-ros2-control \
+    ros-${ROS_DISTRO}-ros2-controllers \
+    ros-${ROS_DISTRO}-gazebo-ros2-control \
+    ros-${ROS_DISTRO}-navigation2 \
+    ros-${ROS_DISTRO}-nav2-bringup \
+    htop
 
 RUN mkdir -p /home/ubuntu/.config/jstest-gtk
 COPY ./setup_ros_network.sh /home/$USER/
