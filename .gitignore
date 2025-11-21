@@ -162,14 +162,22 @@ cython_debug/
 #.idea/
 
 # Ignore everything
-*
+/*
 
-# # But not these files...
+# But keep these files
 !.gitignore
-!.devcontainer/*
-!remove.sh
-!setup.sh
-!bashrc
+!README.md
+!LICENSE
+
+# Keep devcontainer Dockerfiles and setup script
+!.devcontainer/
+!.devcontainer/setup_ros_network.sh
+!.devcontainer/Dockerfile.*
+!.devcontainer/**/Dockerfile.*
+
+# Keep Gazebo models/worlds collection
+!gazebo_models_worlds_collection/
+!gazebo_models_worlds_collection/**
 
 # ...even if they are in subdirectories
 # !*/

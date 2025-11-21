@@ -1,0 +1,74 @@
+ARG ROS_DISTRO=foxy
+FROM osrf/ros:${ROS_DISTRO}-desktop
+
+ARG USER=ubuntu
+ENV USER=$USER
+ARG UID=1000
+ARG GID=$UID
+ARG TIMEZONE=Asia/Colombo
+
+
+RUN if ! id -u $UID >/dev/null 2>&1; then \
+        groupadd --gid $GID $USER && \
+        useradd -s /bin/bash --uid $UID --gid $GID -m $USER; \
+    fi
+# Add sudo support for the non-root user
+RUN apt-get update && \
+    apt-get install -y sudo && \
+    echo "$USER ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USER && \
+    chmod 0440 /etc/sudoers.d/$USER
+
+# Switch from root to user
+USER $USER
+
+ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+
+# Add user to video group to allow access to webcam
+RUN sudo usermod --append --groups video $USER
+
+# Switch to projects dir
+WORKDIR /home/$USER/projects/
+
+# Update all packages and install additional packages
+RUN echo "\\nUpdate all packages \\n"
+RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends \
+    wget \
+    software-properties-common && \
+    sudo rm -rf /var/lib/apt/lists/*
+
+RUN echo "\\nAdding Deadsnakes PPA\\n"
+RUN sudo add-apt-repository ppa:deadsnakes/ppa -y
+
+# Install Git, Python and PyQT5
+RUN echo "\\nInstall Git, Python and PyQT5 \\n"
+RUN sudo apt install -y --no-install-recommends \
+    git \
+    python3-pip \
+    python3-pyqt5 \
+    python3-serial \
+    libgl1-mesa-glx
+
+RUN sudo rm -rf /etc/localtime && sudo ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
+
+RUN . /opt/ros/${ROS_DISTRO}/setup.sh
+
+# Install lowlatency kernel
+RUN sudo apt update && sudo apt install linux-lowlatency iproute2 -y
+
+# Clean and remove apt list
+RUN sudo apt clean && sudo rm -rf /var/lib/apt/lists/*
+
+# Source the ROS setup file
+RUN echo "\\nSource the ROS setup file and final configs \\n"
+RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
+RUN echo "export XDG_RUNTIME_DIR=/home/$USER" >> ~/.bashrc
+RUN echo "chmod 0700 /home/$USER" >> ~/.bashrc
+
+RUN sudo sh -c 'echo "@realtime soft rtprio 99" >> /etc/security/limits.conf'
+RUN sudo sh -c 'echo "@realtime soft priority 99" >> /etc/security/limits.conf'
+RUN sudo sh -c 'echo "@realtime soft memlock 102400" >> /etc/security/limits.conf'
+RUN sudo sh -c 'echo "@realtime hard rtprio 99" >> /etc/security/limits.conf'
+RUN sudo sh -c 'echo "@realtime hard priority 99" >> /etc/security/limits.conf'
+RUN sudo sh -c 'echo "@realtime hard memlock 102400" >> /etc/security/limits.conf'
+
+CMD ["bash"]

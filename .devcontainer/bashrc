@@ -1,0 +1,32 @@
+function remove_build() {
+    if [ $# -eq 0 ]; then
+        read -p "You are about to delete all build files from all packages. Do you want to continue? (y/n): " -n 1 -r
+        echo   # (optional) move to a new line
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            echo Deleting build files from all packages...
+            rm -rf ~/projects/*/build ~/projects/*/install ~/projects/*/log
+        else
+            read -e -p "Please provide a package name: " -r
+            echo   # (optional) move to a new line
+            remove_build $REPLY
+        fi
+        return
+    else
+        read -p "Are you sure you want to delete build files from $1? (y/n): " -n 1 -r
+        echo   # (optional) move to a new line
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            echo Deleting build files from $1...
+            rm -rf ~/projects/$1/build ~/projects/$1/install ~/projects/$1/log
+        fi
+    fi
+}
+
+function ros2_source() {
+    if [ $# -eq 0 ]; then
+        echo "Available projects:"
+        ls ~/projects/
+        return
+    else
+        source ~/projects/$1/install/setup.bash
+    fi
+}
