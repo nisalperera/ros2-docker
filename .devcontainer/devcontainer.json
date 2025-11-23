@@ -1,6 +1,6 @@
 {
   "name": "ROS 2 desktop-full",
-  "dockerFile": "Dockerfile",
+  "dockerFile": "Dockerfile.dev",
   "runArgs": [
     "--network=host",
     "--ipc=host",
@@ -35,19 +35,24 @@
         "ms-python.python",
         "ms-toolsai.jupyter",
         "ms-python.debugpy",
-        "ms-vscode.cpptools-extension-pack"
+        "ms-vscode.cpptools-extension-pack",
+        "ranch-hand-robotics.rde-ros-2",
+        "ranch-hand-robotics.urdf-editor",
+        "ranch-hand-robotics.rde-pack",
+        "njpwerner.autodocstring"
       ]
     }
   },
   "containerEnv": {
     "DISPLAY": "${localEnv:DISPLAY}",
-    "ROS_DOMAIN_ID": "5"
-    // "ROS_LOCALHOST_ONLY": "0",
-    // "RMW_IMPLEMENTATION": "rmw_cyclonedds_cpp"
-    // "ROS_AUTOMATIC_DISCOVERY_RANGE": "SUBNET"
+    "ROS_DOMAIN_ID": "5",
+    "GAZEBO_MODELS": "/home/ubuntu/gazebo/models",
+    "GAZEBO_RESOURCES": "/home/ubuntu/gazebo/worlds"
   },
   "remoteEnv": {
     "DOCKER_BUILDKIT": "0",
-    "ROS_DOMAIN_ID": "5"
+    "ROS_DOMAIN_ID": "5",
+    "GAZEBO_MODELS": "/home/ubuntu/gazebo/models",
+    "GAZEBO_RESOURCES": "/home/ubuntu/gazebo/worlds"
   }
 }

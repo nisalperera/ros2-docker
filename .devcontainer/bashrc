@@ -30,3 +30,13 @@ function ros2_source() {
         source ~/projects/$1/install/setup.bash
     fi
 }
+
+function buildpackage() {
+    if [ ! -f CMakeLists.txt ] || [ ! -f package.xml ]; then
+        echo "No ROS2 Package detected. Available packages:"
+        ls ~/projects/
+        return
+    else
+        colcon build --symlink-install
+    fi
+}

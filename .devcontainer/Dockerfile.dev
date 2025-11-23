@@ -80,14 +80,14 @@ RUN sudo sh -c 'echo "@realtime hard memlock 102400" >> /etc/security/limits.con
 
 # ROS2 foxy dev desktop image
 # Install Joystick test packages
-RUN sudo apt install -y --no-install-recommends \
+RUN sudo apt update && sudo apt install -y --no-install-recommends \
     joystick \
     evtest \
     jstest-gtk
 
 # Install ros2 packages addition to the desktop image
 RUN echo "\\nInstall ros2 packages including Gazebo \\n"
-RUN sudo apt-get -y install \
+RUN sudo apt update && sudo apt -y install \
     ros-${ROS_DISTRO}-joint-state-publisher-gui \
     ros-${ROS_DISTRO}-controller-manager \
     ros-${ROS_DISTRO}-twist-mux \
@@ -109,5 +109,15 @@ RUN sudo chmod +x /home/$USER/setup_ros_network.sh
 
 COPY bashrc /home/$USER/
 RUN { cat /home/$USER/.bashrc; printf '\n'; cat /home/$USER/bashrc; } > tmp && mv tmp /home/$USER/.bashrc
+
+RUN echo '\n\n# Only add to GAZEBO_MODEL_PATH if not already included' >> /home/$USER/.bashrc && \
+    echo 'if [[ ":$GAZEBO_MODEL_PATH:" != *":${GAZEBO_MODELS}:"* ]]; then' >> /home/$USER/.bashrc && \
+    echo '  export GAZEBO_MODEL_PATH="${GAZEBO_MODEL_PATH:+$GAZEBO_MODEL_PATH:}${GAZEBO_MODELS}"' >> /home/$USER/.bashrc && \
+    echo 'fi' >> /home/$USER/.bashrc && \
+    echo '' >> /home/$USER/.bashrc && \
+    echo 'if [[ ":$GAZEBO_RESOURCE_PATH:" != *":${GAZEBO_RESOURCES}:"* ]]; then' >> /home/$USER/.bashrc && \
+    echo '  export GAZEBO_RESOURCE_PATH="${GAZEBO_RESOURCE_PATH:+$GAZEBO_RESOURCE_PATH:}${GAZEBO_RESOURCES}"' >> /home/$USER/.bashrc && \
+    echo 'fi' >> /home/$USER/.bashrc
+
 
 CMD ["bash"]

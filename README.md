@@ -50,9 +50,15 @@ The development image comes with a curated ROS 2 Foxy stack for simulation, cont
    git checkout foxy
    ```
 3. Open the folder in VS Code and reopen in container:
-   - Open VS Code in `ros2-docker`.  
+   - Open VS Code in `ros2-docker`.
+   - Change the build arguements and environment variables as you want.
    - Press CTRL+SHIFT+P to open command palette, Search for “Dev Containers: Reopen in Container” and press enter to run it.
    - VS Code will build the ROS 2 Foxy dev image and start a container using the provided devcontainer configuration.
+
+## Build Arguements
+   - `ROS_DISTRO` - ROS2 distribution for the docker container. Do not change this. If you do, It will break the setup.
+   - `TIMEZONE` - Timezone you want. Change this to match your timezone (OPTIONAL. Default: `Asia/Colombo`, Select the timezone from `/usr/share/zoneinfo/`).
+   - `USER` - Username for the container to use. (OPTIONAL. Default: `ubuntu`)
 
 After the container starts, a ROS 2 Foxy environment with your workspace mounted is ready to use directly from the VS Code terminal.
 
@@ -68,11 +74,18 @@ source install/setup.bash
 ros2 run <package> <node>
 ```
 
+You can also build your package using following custom bash commands. These commands are only available in development variant
+
+- `buildpackage` - Equivelent to running `colcon build --symlink-install` inside your package. You mustbe inside the package where the
+                   CMakeLists.txt is available. 
+- `ros2_source {package path}` - Equivelent to running `{package path}/install/setup.bash`
+
 ## License and third‑party components
 
 This project is provided under the license specified in the repository. When using these Dockerfiles and images, ensure compliance with:
 
 - ROS 2 licenses: Core ROS 2 code is generally licensed under Apache 2.0, with some components under BSD‑3‑Clause or other permissive licenses. Refer to the ROS 2 documentation and individual package LICENSE files for details.
 - Docker licenses: Docker Engine is licensed under Apache 2.0, while Docker Desktop and related services are covered by Docker’s subscription and desktop license agreements. Check Docker’s official legal pages for up‑to‑date terms before commercial use.
+- Gazebo Models and Worlds Collection licensed under GNU.
 
 Users are responsible for reviewing and complying with all applicable third‑party licenses when building and distributing images based on this repository.
