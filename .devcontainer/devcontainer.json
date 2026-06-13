@@ -1,36 +1,41 @@
 {
   "name": "ROS 2 desktop-full",
-  "dockerFile": "Dockerfile",
+  "dockerFile": "${localWorkspaceFolder}/.devcontainer/Dockerfile",
   "runArgs": [
     "--network=host",
     "--ipc=host",
-    "-e QT_X11_NO_MITSHM=1",
-    "--volume=/tmp/.X11-unix:/tmp/.X11-unix",
+    "--gpus=all",
+    "-e", "QT_X11_NO_MITSHM=1",
+    "-e", "NVIDIA_VISIBLE_DEVICES=all",
+    "-e", "NVIDIA_DRIVER_CAPABILITIES=graphics,compute,utility,display",
     "--device-cgroup-rule=c 13:* rmw",
     "--name=ROS2-humble"
   ],
-  "workspaceFolder": "/home/ubuntu/projects",
-  "workspaceMount": "source=${localWorkspaceFolder}/projects,target=/home/ubuntu/projects,type=bind",
+  "workspaceFolder": "/root/projects",
+  "workspaceMount": "source=${localWorkspaceFolder}/projects,target=/root/projects,type=bind",
   "mounts": [
-    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/ubuntu/.bash_history,type=bind",
-    "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/models,target=/home/ubuntu/gazebo/models,type=bind", // comment this line if you don't have gazebo models
-    "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/worlds,target=/home/ubuntu/gazebo/worlds,type=bind", // comment this line if you don't have gazebo worlds
-    "source=${localWorkspaceFolder}/.ros,target=/home/ubuntu/.ros,type=bind",
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/root/.bash_history,type=bind",
+    "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/models,target=/root/gazebo/models,type=bind",
+    "source=${localWorkspaceFolder}/gazebo_models_worlds_collection/worlds,target=/root/gazebo/worlds,type=bind",
+    "source=${localWorkspaceFolder}/.ros,target=/root/.ros,type=bind",
+    "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind",
     "source=/dev/dri,target=/dev/dri,type=bind",
-    "source=/dev/input,target=/dev/input,type=bind"
+    "source=/dev/input,target=/dev/input,type=bind",
+    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
+    "source=${localEnv:XAUTHORITY},target=/root/.Xauthority,type=bind,ro"
   ],
   "build": {
-    "context": "..",
-    "dockerfile": "Dockerfile",
+    "context": "${localWorkspaceFolder}",
+    "dockerfile": "${localWorkspaceFolder}/.devcontainer/Dockerfile",
     "args": {
       "ROS_DISTRO": "humble"
     },
     "tag": "ros2-humble"
   },
+  "initializeCommand": "xhost +local:docker",
+  "postStopCommand": "xhost -local:docker",
   "customizations": {
-    // Configure properties specific to VS Code.
     "vscode": {
-      // Add the IDs of extensions you want installed when the container is created.
       "extensions": [
         "ms-vscode.makefile-tools",
         "ms-python.python",
@@ -41,7 +46,8 @@
     }
   },
   "containerEnv": {
-    "DISPLAY": "${localEnv:DISPLAY}"
+    "DISPLAY": ":0",
+    "XAUTHORITY": "/root/.Xauthority"
   },
   "remoteEnv": {
     "DOCKER_BUILDKIT": "0"
