@@ -73,6 +73,7 @@ RUN apt-get -y install \
     ros-${ROS_DISTRO}-navigation2 \
     ros-${ROS_DISTRO}-nav2-bringup \
     ros-${ROS_DISTRO}-topic-tools \
+    ros-${ROS_DISTRO}-robot-localization \
     htop
 
 RUN rm -rf /etc/localtime && ln -s /usr/share/zoneinfo/Asia/Colombo /etc/localtime
@@ -113,5 +114,9 @@ RUN mkdir -p ~/.gazebo/models \
 
 RUN echo "export IGN_GAZEBO_RESOURCE_PATH=$HOME/.gazebo/models:$IGN_GAZEBO_RESOURCE_PATH" >> ~/.bashrc
 RUN echo 'export IGN_GAZEBO_SYSTEM_PLUGIN_PATH=/opt/ros/humble/lib:${IGN_GAZEBO_SYSTEM_PLUGIN_PATH}' >> ~/.bashrc
+
+RUN echo "export __NV_PRIME_RENDER_OFFLOAD=1" >> ~/.bashrc
+RUN echo "export __GLX_VENDOR_LIBRARY_NAME=nvidia" >> ~/.bashrc
+RUN echo "export __VK_LAYER_NV_optimus=NVIDIA_only" >> ~/.bashrc
 
 CMD ["bash"]

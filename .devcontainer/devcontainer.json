@@ -21,8 +21,8 @@
     "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind",
     "source=/dev/dri,target=/dev/dri,type=bind",
     "source=/dev/input,target=/dev/input,type=bind",
-    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
-    "source=${localEnv:XAUTHORITY},target=/root/.Xauthority,type=bind,ro"
+    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached"
+    // "source=${localEnv:XAUTHORITY},target=/root/.Xauthority,type=bind,ro"
   ],
   "build": {
     "context": "${localWorkspaceFolder}",
@@ -32,8 +32,9 @@
     },
     "tag": "ros2-humble"
   },
+  "postStartCommand": "source /opt/ros/humble/setup.bash && cd /root/projects && colcon build --symlink-install",
   "initializeCommand": "xhost +local:docker",
-  "postStopCommand": "xhost -local:docker",
+  "postStopCommand": "xhost -local:docker && rm -rf projects/log projects/build projects/install",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -41,6 +42,7 @@
         "ms-python.python",
         "ms-toolsai.jupyter",
         "ms-python.debugpy",
+        "ranch-hand-robotics.rde-pack",
         "ms-vscode.cpptools-extension-pack"
       ]
     }
@@ -50,6 +52,6 @@
     "XAUTHORITY": "/root/.Xauthority"
   },
   "remoteEnv": {
-    "DOCKER_BUILDKIT": "0"
+    "DOCKER_BUILDKIT": "1"
   }
 }
