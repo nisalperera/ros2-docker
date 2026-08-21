@@ -48,12 +48,13 @@ The development image comes with a curated ROS 2 Foxy stack for simulation, cont
    git clone https://github.com/nisalperera/ros2-docker.git
    cd ros2-docker
    git checkout foxy
+   git submodule update --init --recursive # Optional: If you want custom models and worlds in Gazebo you can pull this git repo.
    ```
 3. Open the folder in VS Code and reopen in container:
    - Open VS Code in `ros2-docker`.
    - Change the build arguements and environment variables as you want.
    - Press CTRL+SHIFT+P to open command palette, Search for “Dev Containers: Reopen in Container” and press enter to run it.
-   - VS Code will build the ROS 2 Foxy dev image and start a container using the provided devcontainer configuration.
+   - VS Code will build the ROS 2 Foxy image and start a container using the provided devcontainer configuration.
 
 ## Build Arguements
    - `ROS_DISTRO` - ROS2 distribution for the docker container. Do not change this. If you do, It will break the setup.
@@ -76,7 +77,7 @@ ros2 run <package> <node>
 
 You can also build your package using following custom bash commands. These commands are only available in development variant
 
-- `buildpackage` - Equivelent to running `colcon build --symlink-install` inside your package. You mustbe inside the package where the
+- `buildpackage` - Equivelent to running `colcon build --symlink-install` inside your package. You must be inside the package where the
                    CMakeLists.txt is available. 
 - `ros2_source {package path}` - Equivelent to running `{package path}/install/setup.bash`
 
